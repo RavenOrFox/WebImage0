@@ -1,0 +1,70 @@
+﻿@page
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+
+<!DOCTYPE html>
+<html lang="ru" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>генератор мемов</title>
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/memeEdit.css" asp-append-version="true">
+    <link rel="icon" href="~/ico/favico.ico" type="image/x-icon">
+
+</head>
+<body id="body" onload="EditMeme()">
+    <div id="drop-zone">
+        <div class="inhint">перетащите файлы сюда</div>
+        
+    </div>
+    <header>
+        <h1>Генератор мемов</h1>
+        <p>Готовые шаблоны</p>
+    </header>
+    <div class="amain">
+        <aside>
+            <h3>Навигация</h3>
+            <nav>
+                <a href="#home">Главная</a>
+                <a href="#products">Товары</a>
+                <a href="#about">О нас</a>
+                <a href="#contact">Контакты</a>
+            </nav>
+        </aside>
+
+        <main id="main">
+
+            <form action="/api/create" method="post" class="editCard" id="FormF" enctype="multipart/form-data">
+                <div class="ed_card">
+                    <img src="" id="EdImg" class="ed_img" onload="canRes()"> 
+                    <input type="text" name="top" value="" placeholder="верхний текст" oninput="canDraw()" class="toptext" id="toptext" maxlength="20" /> <br />
+                    <input type="text" name="bottom" value="" placeholder="нижний текст" oninput="canDraw()" class="bottomtext" id="bottomtext" maxlength="20" />
+                </div>
+                
+                <canvas id="canvas" class="main_canvas"></canvas>
+                 
+                <br />
+                <label class="file-input-label">
+                    Выбрать файл
+                    <input type="file" name="Img" value="" onchange="ImgCng()" id="ImgPath" />
+                </label>
+
+                <br />
+                <input type="text" name="id" value="0" style="display:none;" />
+                @* <input type="submit" name="name" value="отправить" id="submit" /> *@ <br />
+                <a href="" class="file-input-label" id="downlink">скачать изображение</a>
+            
+                   
+                    <h2><!--заголовок--></h2>
+                    <p><!--описание--></p>
+                    <div>
+                        <button><!--первый тег--></button>
+                        <button><!--второй тег--></button>
+                    </div>
+            </form>
+        </main>
+    </div>
+</body>
+</html>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/script.js" asp-append-version="true"></script>
