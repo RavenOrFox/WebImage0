@@ -51,14 +51,24 @@ async function EditMeme() {
 function canRes() {
     const imgElement = document.getElementById('EdImg');
     const canvas = document.querySelector('canvas');
-    const top = document.querySelector('toptext');
-    const bottom = document.querySelector('bottomtext');
-    $(canvas).attr('height', imgElement.naturalHeight);
+    const top = document.getElementById('toptext');
+    const bottom = document.getElementById('bottomtext');
+    const regex = /\r?\n/g;
+    const a = 28;
+
+    $(canvas).attr('height', imgElement.naturalHeight); // отрисовка картинки
     $(canvas).attr('width', imgElement.naturalWidth);
     console.log(`Ширина: ${imgElement.naturalWidth}, Высота: ${imgElement.naturalHeight}`);
+
+    $(top).attr("maxlength", (((imgElement.naturalWidth - imgElement.naturalWidth % a) / a) * 2));
+    console.log("maxl = " + ((imgElement.naturalWidth - imgElement.naturalWidth % a) / a) * 2);
+    $(bottom).attr("maxlength", ((imgElement.naturalWidth - imgElement.naturalWidth % a) / a) * 2);
+    $(top).attr('style', "width: " + (imgElement.clientWidth - (imgElement.clientWidth * 0.08)) + "px;");
+    $(bottom).attr('style', "width: " + (imgElement.clientWidth - (imgElement.clientWidth * 0.08)) + "px;");
+    
     canDraw();
 
-}
+} //23
 
 function canDraw() {
     const img = document.getElementById('EdImg');
@@ -70,7 +80,11 @@ function canDraw() {
     const imgElement = document.getElementById('EdImg');
     const height = vtx.height;
     const width = vtx.width;
-    const fontSize = height / 13;
+    const fontSize = height / 14;
+    const chan = ((img.naturalWidth - (img.naturalWidth % fontSize*2)) / fontSize*2)+2;
+    console.log("chan = " + chan);
+    var ta;
+    var tb;
 
     ctx.drawImage(img, 0, 0)
     ctx.font =  fontSize+"px impact";
@@ -78,12 +92,32 @@ function canDraw() {
     ctx.fillStyle = "white";
     ctx.strokeStyle = "black";
     ctx.lineWidth = 1.5;
-    ctx.fillText(top, width / 2, height / 8);
-    ctx.strokeText(top, width / 2, height / 8);
 
-    ctx.fillText(bottom, width / 2, height/1.03);
-    ctx.strokeText(bottom, width / 2, height/1.03);
+    if (top.length > chan) {
+        ta = top.slice(0, chan);
+        ctx.fillText(ta, width / 2, height / 8);
+        ctx.strokeText(ta, width / 2, height / 8);
+        tb = top.slice(chan, top.length);
+        ctx.fillText(tb, width / 2, (height / 8) + fontSize);
+        ctx.strokeText(tb, width / 2, height / 8 + fontSize);
+    }
+    else { 
+        ctx.fillText(top, width / 2, height / 8);
+        ctx.strokeText(top, width / 2, height / 8);
+    }
 
+    if (bottom.length > chan) {
+        ta = bottom.slice(0, chan);
+        ctx.fillText(ta, width / 2, height / 1.03 - fontSize);
+        ctx.strokeText(ta, width / 2, height / 1.03 - fontSize);
+        tb = bottom.slice(chan, bottom.length);
+        ctx.fillText(tb, width / 2, height / 1.03);
+        ctx.strokeText(tb, width / 2, height / 1.03);
+    }
+    else { 
+        ctx.fillText(bottom, width / 2, height/1.03);
+        ctx.strokeText(bottom, width / 2, height/1.03);
+    }
     const dataUrl = vtx.toDataURL();
     link.href = dataUrl;
     link.download = 'meme.png';
@@ -177,4 +211,30 @@ window.addEventListener('drop', e => {
     console.log('Выбран файл:', file.name);
 
 
+});
+
+async function ai() {
+    const imgElement = document.getElementById('EdImg');
+    const text = document.getElementById("text");
+    const a = 28;
+    const b = ((imgElement.naturalWidth - imgElement.naturalWidth % a) / a) * 2;
+    const response = await fetch("/api/ai", {
+        method: "post",
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+         body: JSON.stringify({
+             prompt: text.value,
+             length: b
+         })
+    });
+    if (response.ok == true) {
+
+        const ss = await response.json();
+        console.log(ss);
+        text.value = ss.top;
+    }
+
+}
+
+window.addEventListener('resize', (e) => {
+    canRes();
 });

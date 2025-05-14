@@ -19,7 +19,6 @@
 .ed_card {
     position: relative;
     display:flex;
-    width:95%;
     aspect-ratio: 16/9;
     overflow: hidden;
     justify-content:center;
@@ -48,11 +47,12 @@ input {
     font-family: Impact;
     text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
     text-align: center;
+    resize: none;
 }
 
 .bottomtext {
     position: absolute;
-    top: 85%;
+    top: 75%;
     background-color: transparent;
     border: none;
     outline: none;
@@ -61,9 +61,10 @@ input {
     font-family: Impact;
     text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
     text-align: center;
+    resize: none;
 }
 
-input::placeholder {
+textarea::placeholder {
     color: white;
     font-family:Impact;
     text-shadow:
@@ -158,4 +159,10 @@ input::placeholder {
 .main_canvas {
     background-color: black;
     display: none;
+}
+
+.textbtn {
+    visibility: visible;
+    display: block;
+
 }
