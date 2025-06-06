@@ -1,5 +1,5 @@
 ﻿
-async function GetMemes() {
+async function GetMemes() {  // функция получения мемов
 
     const response = await fetch("/api/memes", {
         method: "GET",
@@ -13,7 +13,7 @@ async function GetMemes() {
 
         // Клонируем новую строку и вставляем её в таблицу
 
-        memes.forEach(meme => {
+        memes.forEach(meme => {     // шаблонизатор карточек мемов
             var clone = template.content.cloneNode(true);
             $(clone.querySelector('a')).attr('id', meme.id)
             $(clone.querySelector('a')).attr('href', '/meme?id='+meme.id)
@@ -31,7 +31,7 @@ async function GetMemes() {
 }
 
 
-async function EditMeme() {
+async function EditMeme() { // функция получения 1 мема
     let params = new URLSearchParams(document.location.search);
     let id = params.get('id');
 
@@ -44,19 +44,17 @@ async function EditMeme() {
         const meme = await response.json();
         var card = document.querySelector("#EdImg");
         $(card).attr('src', '/img/' + meme.imgUrl);
-        //canRes();
     }
 }
 
-function canRes() {
+function canRes() { // расчет отрисовка текста в блоке img
     const imgElement = document.getElementById('EdImg');
     const canvas = document.querySelector('canvas');
     const top = document.getElementById('toptext');
     const bottom = document.getElementById('bottomtext');
-    const regex = /\r?\n/g;
     const a = 28;
 
-    $(canvas).attr('height', imgElement.naturalHeight); // отрисовка картинки
+    $(canvas).attr('height', imgElement.naturalHeight); 
     $(canvas).attr('width', imgElement.naturalWidth);
     console.log(`Ширина: ${imgElement.naturalWidth}, Высота: ${imgElement.naturalHeight}`);
 
@@ -68,9 +66,9 @@ function canRes() {
     
     canDraw();
 
-} //23
+} 
 
-function canDraw() {
+function canDraw() { // отрисовка изображения с текстом в canvas
     const img = document.getElementById('EdImg');
     const ctx = document.getElementById("canvas").getContext("2d");
     const link = document.getElementById('downlink');
@@ -93,7 +91,7 @@ function canDraw() {
     ctx.strokeStyle = "black";
     ctx.lineWidth = 1.5;
 
-    if (top.length > chan) {
+    if (top.length > chan) { // деление строки
         ta = top.slice(0, chan);
         ctx.fillText(ta, width / 2, height / 8);
         ctx.strokeText(ta, width / 2, height / 8);
@@ -123,7 +121,7 @@ function canDraw() {
     link.download = 'meme.png';
 }
 
-function ImgCng() {
+function ImgCng() { // смена картинки в img при загрузке картинки пользователя
 
 
     const fileInput = document.getElementById('ImgPath');
@@ -146,7 +144,7 @@ function ImgCng() {
     
 }
 
-const dropHint = document.getElementById('drop-zone');
+const dropHint = document.getElementById('drop-zone'); // блок захвата файла при перемещении его на страницу
 const fileInput = document.getElementById('ImgPath');
 
 let dragCounter = 0; // для корректного отслеживания dragenter/dragleave по всей странице
@@ -213,24 +211,33 @@ window.addEventListener('drop', e => {
 
 });
 
-async function ai() {
+async function ai() {  // блок отправки запроса на генерацию мема
     const imgElement = document.getElementById('EdImg');
     const text = document.getElementById("text");
     const a = 28;
+    const toptext = document.getElementById("toptext");
+    const bottomtext = document.getElementById("bottomtext")
     const b = ((imgElement.naturalWidth - imgElement.naturalWidth % a) / a) * 2;
+    const formData = new FormData();
+    const img64 = toBase64();
+    console.log(img64.length);
+    console.log(img64);
     const response = await fetch("/api/ai", {
         method: "post",
         headers: { "Accept": "application/json", "Content-Type": "application/json" },
          body: JSON.stringify({
              prompt: text.value,
-             length: b
+             length: b,
+             imgBase64: img64
          })
     });
     if (response.ok == true) {
 
         const ss = await response.json();
         console.log(ss);
-        text.value = ss.top;
+        toptext.value = ss.top;
+        bottomtext.value = ss.bottom;
+        canDraw();
     }
 
 }
@@ -238,3 +245,13 @@ async function ai() {
 window.addEventListener('resize', (e) => {
     canRes();
 });
+
+
+function toBase64() { // получение картинки из canvas в формате base64
+    const canvas = document.getElementById('canvas');
+    document.getElementById('toptext').value = '';
+    document.getElementById('bottomtext').value = '';
+    canDraw();
+    
+    return canvas.toDataURL();
+}

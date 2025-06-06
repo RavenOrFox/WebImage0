@@ -22,23 +22,12 @@
         <p>Готовые шаблоны</p>
     </header>
     <div class="amain">
-        <aside>
-            <h3>Навигация</h3>
-            <nav>
-                <a href="#home">Главная</a>
-                <a href="#products">Товары</a>
-                <a href="#about">О нас</a>
-                <a href="#contact">Контакты</a>
-            </nav>
-        </aside>
 
         <main id="main">
 
             <form action="" method="post" class="editCard" id="FormF" enctype="multipart/form-data">
                 <div class="ed_card">
                     <img src="" id="EdImg" class="ed_img" onload="canRes()"> 
-                    @* <input type="text" name="top" value="" placeholder="верхний текст" oninput="canDraw()" class="toptext" id="toptext"/> <br />
-                    <input type="text" name="bottom" value="" placeholder="нижний текст" oninput="canDraw()" class="bottomtext" id="bottomtext" /> *@
                     <textarea name="top" value="" placeholder="верхний текст" oninput="canDraw()" class="toptext" id="toptext"></textarea>
                     <textarea name="bottom" value="" placeholder="нижний текст" oninput="canDraw()" class="bottomtext" id="bottomtext"></textarea>
                 </div>
@@ -53,18 +42,11 @@
 
                 <br />
                 <input type="text" name="id" value="0" style="display:none;" />
-                @* <input type="submit" name="name" value="отправить" id="submit" /> *@ <br />
                 <a href="" class="file-input-label" id="downlink">скачать изображение</a> <br />
-                @* <input type="text" name="name" value="" id="text" /> *@
+                <label>контекст/комментарий</label>
                 <textarea name="name" value="" id="text"></textarea>
-                <button class="textbtn" type="button" id="textbtn" onclick="ai()">да-да?</button>
+                <button class="textbtn" type="button" id="textbtn" onclick="ai()">сгенерировать мем</button>
                    
-@*                     <h2><!--заголовок--></h2>
-                    <p><!--описание--></p>
-                    <div>
-                        <button><!--первый тег--></button>
-                        <button><!--второй тег--></button>
-                    </div> *@
             </form>
 
 

@@ -2,7 +2,6 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    /* display: flex; */
 }
 header {
     background-color: #4CAF50;
@@ -31,6 +30,7 @@ main {
     box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
     max-height: 500px;
     color: black;
+    min-width: 200px;
 }
 
 .card:hover {
@@ -43,7 +43,7 @@ nav a {
     color: #333;
 }
 nav a:hover {
-    color: #4CAF50; /* Цвет при наведении */
+    color: #4CAF50;
 }
 
 .amain {
